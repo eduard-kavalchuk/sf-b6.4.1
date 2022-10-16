@@ -3,11 +3,12 @@
   hosts: mysql-server
   become: true
   tasks:
-    - name: Install MySQL server with apt
+    - name: Install MySQL server
       ansible.builtin.apt:
         name: mysql-server
         update_cache: true
-    - name: Make sure MySQL server is running
+
+    - name: Start MySQL server
       ansible.builtin.service:
         name: mysql
         state: restarted
