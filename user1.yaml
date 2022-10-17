@@ -1,0 +1,28 @@
+---
+- name: Create a user and transfer a public ssh key
+  hosts: VM
+  become: true
+  gather_facts: false
+  vars:
+    username: user1
+    dest_key: "/home/{{ username }}/.ssh/id_rsa.pub"
+    source_key: ./id_rsa.pub
+  tasks:
+    - name: Create user
+      ansible.builtin.user:
+        name: "{{ username }}"
+        shell: /bin/bash
+        state: present
+    - name: Create .ssh directory
+      ansible.builtin.file:
+        dest: "{{ dest_key | dirname }}"
+        owner: "{{ username }}"
+        mode: 0700
+        state: directory
+    - name: Transfer ssh key
+      ansible.builtin.copy:
+        src: "{{ source_key }}"
+        dest: "{{ dest_key }}"
+        mode: 0600
+        owner: "{{ username }}"
+        decrypt: yes
