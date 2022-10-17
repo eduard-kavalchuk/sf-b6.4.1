@@ -1,0 +1,17 @@
+---
+- name: Install or uninstall postfix
+  hosts: VM
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Install postfix
+      ansible.builtin.apt:
+        name: postfix
+        state: present
+        update_cache: true
+      tags: init postfix
+    - name: Uninstall postfix
+      ansible.builtin.apt:
+        name: postfix
+        state: absent
+      tags: drop
